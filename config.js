@@ -8,4 +8,4 @@ module.exports = {
 
 	ignored_keyword: [ 'the', 'and', 'an', 'a', 'in', 'of' ]
 
-};
+}
