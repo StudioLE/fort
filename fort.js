@@ -9,6 +9,7 @@ var read_tv = require('./lib/read_tv')
 var match_show = require('./lib/match_show')
 var prep_downloads = require('./lib/prep_downloads')
 var move_downloads = require('./lib/move_downloads')
+var extract_downloads = require('./lib/extract_downloads')
 
 // Config 
 var config = require('./config')
@@ -79,6 +80,9 @@ async.waterfall([
 				for(var i in ignored) {
 					out.ln(chalk.yellow('Ignore: ') + ignored[i].file_name + ' (' + ignored[i].ignored + ')')
 				}
+
+				out.ln(hr)
+				out.send()
 			}
 
 			callback(err, copy, extract, ignored)
@@ -98,15 +102,14 @@ async.waterfall([
 	// Extract episodes
 	function(extract, ignored, callback) {
 
-		// @todo this must be called directly after the move operation otherwise it will delete content too early
-		// remove_downloads(remove, function(err, remove) {
-		// 	callback(err, copy, extract, ignored, remove)
-		// })
+		extract_downloads(extract, function(err) {
+			callback(err, ignored)
+		})
 
 	}
 
 ],
-function(err, copy, extract, ignored, remove) {
+function(err, ignored) {
 
 	if(err) throw err
 
