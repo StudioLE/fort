@@ -14,7 +14,7 @@ async.waterfall([
 	function(callback) {
 
 		read_downloads(config.download_directory, function(err, episodes, ignored) {
-			callback(null, episodes, ignored)
+			callback(err, episodes, ignored)
 		})
 
 	}, 
@@ -22,13 +22,15 @@ async.waterfall([
 	function(episodes, ignored, callback) {
 
 		prep_downloads(episodes, function(err, copy, extract) {
-			callback(null, copy, extract, ignored)
+			callback(err, copy, extract, ignored)
 		})
 
 	}
 
 ],
 function(err, copy, extract, ignored) {
+
+	if(err) throw err;
 		
 	console.log('THESE FILES WILL BE COPIED')
 	for(var i in copy) {
