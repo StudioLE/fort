@@ -1,5 +1,6 @@
 // Node Modules 
 var async = require('./node_modules/async')
+var chalk = require('chalk')
 
 // Fort Modules
 var read_downloads = require('./lib/read_downloads')
@@ -31,19 +32,33 @@ async.waterfall([
 function(err, copy, extract, ignored) {
 
 	if(err) throw err;
-		
-	console.log('THESE FILES WILL BE COPIED')
+
+	var out = []
+	var hr = chalk.gray('------------------------------------------------')
+
+	out.push(hr)
+	out.push(chalk.cyan.bold('Fort ') + chalk.gray('- Fetch and sort for media archives'))
+	out.push(hr)
+	out.push(chalk.blue('Download directory: ') + chalk.gray(config.download_directory))
+	out.push(chalk.blue('TV directory: ') + chalk.gray(config.tv_directory))
+	out.push(chalk.blue('Movies directory: ') + chalk.gray(config.movies_directory))
+	out.push(hr)
+	
+	// Copy
 	for(var i in copy) {
-		console.log(copy[i].copy)
+		out.push(chalk.green('Copy: ') + chalk.gray(copy[i].copy))
 	}
 
-	console.log('THESE FILES WILL BE EXTRACTED')
+	// Extract
 	for(var i in extract) {
-		console.log(extract[i].extract)
+		out.push(chalk.magenta('Extract: ') + chalk.gray(extract[i].extract))
 	}
 
-	console.log('THESE FILES ARE BEING IGNORED')
+	// Ignore
 	for(var i in ignored) {
-		console.log(ignored[i])
+		out.push(chalk.yellow('Ignore: ') + chalk.gray(ignored[i]))
 	}
+
+	// Log the output
+	for(var i in out) console.log(out[i])
 })
