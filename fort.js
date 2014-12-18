@@ -1,12 +1,15 @@
 // Node Modules 
-var async = require('./node_modules/async')
+var async = require('async')
 var chalk = require('chalk')
 
 // Fort Modules
+var out = require('./lib/out')
 var read_downloads = require('./lib/read_downloads')
 var read_tv = require('./lib/read_tv')
 var match_show = require('./lib/match_show')
 var prep_downloads = require('./lib/prep_downloads')
+var move_downloads = require('./lib/move_downloads')
+var remove_downloads = require('./lib/remove_downloads')
 
 // Config 
 var config = require('./config')
@@ -16,17 +19,20 @@ var config = require('./config')
 // Fort - Fetch and sort for media archives
 // --------------------------------------------------
 
-var out = []
-var hr = chalk.gray('--------------------------------------------------')
+var hr = '--------------------------------------------------'
 
 // Format the console output
-out.push(hr)
-out.push(chalk.cyan.bold('Fort ') + chalk.gray('- Fetch and sort for media archives'))
-out.push(hr)
-out.push(chalk.magenta('Download directory: ') + chalk.gray(config.download_directory))
-out.push(chalk.magenta('TV directory: ') + chalk.gray(config.tv_directory))
-out.push(chalk.magenta('Movies directory: ') + chalk.gray(config.movies_directory))
-out.push(hr)
+out.ln([
+	hr,
+	chalk.cyan('Fort ') + '- Fetch and sort for media archives',
+	hr,
+	chalk.magenta('Download directory: ') + config.download_directory,
+	chalk.magenta('TV directory: ') + config.tv_directory,
+	chalk.magenta('Movies directory: ') + config.movies_directory,
+	hr
+])
+
+out.send()
 
 // Begin script
 async.waterfall([
@@ -58,31 +64,53 @@ async.waterfall([
 
 		prep_downloads(episodes, ignored, function(err, copy, extract, ignored) {
 
-			// Copy
-			for(var i in copy) {
-				out.push(chalk.green('Copy: ') + chalk.gray(copy[i].copy))
-			}
+			if(config.log_intent) {
 
-			// Extract
-			for(var i in extract) {
-				out.push(chalk.cyan('Extract: ') + chalk.gray(extract[i].extract))
-			}
+				// Copy
+				for(var i in copy) {
+					out.ln(chalk.green('Copy: ') + copy[i].copy)
+				}
 
-			// Ignore
-			for(var i in ignored) {
-				out.push(chalk.yellow('Ignore: ') + chalk.gray(ignored[i].file_name + ' (' + ignored[i].ignored + ')'))
+				// Extract
+				for(var i in extract) {
+					out.ln(chalk.cyan('Extract: ') + extract[i].extract)
+				}
+
+				// Ignore
+				for(var i in ignored) {
+					out.ln(chalk.yellow('Ignore: ') + ignored[i].file_name + ' (' + ignored[i].ignored + ')')
+				}
 			}
 
 			callback(err, copy, extract, ignored)
 		})
 
+	},
+
+	// Move episodes
+	function(copy, extract, ignored, callback) {
+
+		move_downloads(copy, function(err, remove) {
+			callback(err, copy, extract, ignored, remove)
+		})
+
+	},
+
+	// Remove episodes
+	function(copy, extract, ignored, remove, callback) {
+
+		// @todo this must be called directly after the move operation otherwise it will delete content too early
+		// remove_downloads(remove, function(err, remove) {
+		// 	callback(err, copy, extract, ignored, remove)
+		// })
+
 	}
 
 ],
-function(err, copy, extract, ignored) {
+function(err, copy, extract, ignored, remove) {
 
 	if(err) throw err;
 
 	// Log the output
-	for(var i in out) console.log(out[i])
+	out.send()
 })
