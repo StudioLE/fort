@@ -1,0 +1,15 @@
+{
+  "name": "Fort",
+  "version": "0.1.0",
+  "description": "Fetch and sort your media files",
+  "main": "fort.js",
+  "dependencies": {
+    "async": "^0.9.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Laurence Elsdon",
+  "license": "ISC"
+}
