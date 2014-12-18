@@ -4,6 +4,8 @@ var chalk = require('chalk')
 
 // Fort Modules
 var read_downloads = require('./lib/read_downloads')
+var read_tv = require('./lib/read_tv')
+var match_show = require('./lib/match_show')
 var prep_downloads = require('./lib/prep_downloads')
 
 // Config 
@@ -29,6 +31,7 @@ out.push(hr)
 // Begin script
 async.waterfall([
 
+	// Read the download directory
 	function(callback) {
 
 		read_downloads(config.download_directory, function(err, episodes, ignored) {
@@ -37,6 +40,20 @@ async.waterfall([
 
 	},
 
+	// Match downloads to TV shows
+	function(episodes, ignored, callback) {
+		
+		read_tv(config.tv_directory, function(err, shows) {
+			match_show(shows, episodes, ignored, function(error, episodes) {
+				// console.log(shows)
+				// console.log(episodes)
+				callback(err, episodes, ignored)
+			})
+		})
+
+	},
+
+	// Decide what needs to be copied or extracted
 	function(episodes, ignored, callback) {
 
 		prep_downloads(episodes, function(err, copy, extract) {
@@ -53,9 +70,9 @@ async.waterfall([
 
 			// Ignore
 			for(var i in ignored) {
-				out.push(chalk.yellow('Ignore: ') + chalk.gray(ignored[i]))
+				out.push(chalk.yellow('Ignore: ') + chalk.gray(ignored[i].file_name + ' (' + ignored[i].ignored + ')'))
 			}
-			
+
 			callback(err, copy, extract, ignored)
 		})
 
