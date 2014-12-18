@@ -56,7 +56,7 @@ async.waterfall([
 	// Decide what needs to be copied or extracted
 	function(episodes, ignored, callback) {
 
-		prep_downloads(episodes, function(err, copy, extract) {
+		prep_downloads(episodes, ignored, function(err, copy, extract, ignored) {
 
 			// Copy
 			for(var i in copy) {
