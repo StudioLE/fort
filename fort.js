@@ -1,9 +1,10 @@
 // Node Modules 
 var async = require('async')
 var chalk = require('chalk')
+var sqwk = require('sqwk')
 
 // Fort Modules
-var out = require('./lib/out')
+//var sqwk.= require('./lib/sqwk.)
 var read_downloads = require('./lib/read_downloads')
 var read_tv = require('./lib/read_tv')
 var match_show = require('./lib/match_show')
@@ -19,20 +20,16 @@ var config = require('./config')
 // Fort - Fetch and sort for media archives
 // --------------------------------------------------
 
-var hr = '--------------------------------------------------'
-
 // Format the console output
-out.ln([
-	hr,
-	chalk.cyan('Fort ') + '- Fetch and sort for media archives',
-	hr,
-	chalk.magenta('Download directory: ') + config.download_directory,
-	chalk.magenta('TV directory: ') + config.tv_directory,
-	chalk.magenta('Movies directory: ') + config.movies_directory,
-	hr
+sqwk.send([
+	'{hr}',
+	['{cyan}', 'Fort ', '- Fetch and sort for media archives'],
+	'{hr}',
+	['{magenta}', 'Download directory: ', config.download_directory],
+	['{magenta}', 'TV directory: ', config.tv_directory],
+	['{magenta}', 'Movies directory: ', config.movies_directory],
+	'{hr}',
 ])
-
-out.send()
 
 // Begin script
 async.waterfall([
@@ -68,21 +65,20 @@ async.waterfall([
 
 				// Copy
 				for(var i in copy) {
-					out.ln(chalk.green('Copy: ') + copy[i].copy)
+					sqwk.stripe(['Copy: ', copy[i].copy], 'green')
 				}
 
 				// Extract
 				for(var i in extract) {
-					out.ln(chalk.cyan('Extract: ') + extract[i].extract)
+					sqwk.stripe(['Extract: ', extract[i].extract], 'cyan')
 				}
 
 				// Ignore
 				for(var i in ignored) {
-					out.ln(chalk.yellow('Ignore: ') + ignored[i].file_name + ' (' + ignored[i].ignored + ')')
+					sqwk.stripe(['Ignore: ', ignored[i].file_name + ' (' + ignored[i].ignored + ')'], 'yellow')
 				}
 
-				out.ln(hr)
-				out.send()
+				sqwk.send(sqwk.hr())
 			}
 
 			callback(err, copy, extract, ignored)
@@ -113,6 +109,5 @@ function(err, ignored) {
 
 	if(err) throw err
 
-	// Log the output
-	out.send()
+	sqwk.send()
 })
