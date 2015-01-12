@@ -1,22 +1,10 @@
-# Fort; Fetch & Sort
+# Fort: Fetch & Sort
 
 Take the effort out of sorting your media library.
 
 Fort sorts through your downloads directory looking for TV episodes, it will then match the show title to directories within your TV shows directory. If the show title matches Fort will move the file into the appropriate season directory.
 
 Fort currently only supports media files but future releases will also allow extraction of `.rar`. Fort also aims to one day automate the process of downloading episodes from your server.
-
-## Methodology
-
-The application follows MVC principles:
-
-- All data is read and written through functions within the util module `./lib/util.js`. The data is stored within a JSON file.
-- The view is located at `./views/log.mst` written in HTML5 using mustache templating
-- Three controllers provide the operations, these are `./lib/add.js`, `./lib/server.js` and `./lib/clear.js`
-
-Each operation is accessed through `./colour-challenge.js` which acts as the command line interface.
-
-To log the data hourly `node colour-challenge add` should be defined as a cron job and the server can either be spun up when required or could be kept running constantly using a package such as [forever](https://github.com/foreverjs/forever).
 
 ## Installation
 
@@ -43,9 +31,20 @@ npm install -g fort
 
 Once installed ensure to add paths to your media directories in the `./config.js` file.
 
-### Usage
+## Usage
 
 Add a single colour to the log
 ```
 node fort
 ```
+
+## Methodology
+
+Some inspiration was drawn from the [Automatic Transfer Script](http://matt.coneybeare.me/automatically-sorting-downloaded-television-e/) written in Ruby by Matt Coneybeare.
+
+Methodology is simple.
+
+1. Read downloads folder 
+2. Identify TV episodes using regular expressions
+3. Match downloaded show title to directory in TV show directory
+4. Move / extract file to TV show directory
