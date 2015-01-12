@@ -1,5 +1,9 @@
 module.exports = {
 
+	// ---------------------------------------
+	// Custom settings
+	// ---------------------------------------
+
 	// TV Show directory (or drive)
 	tv_directory: 'M:\\TV',
 
@@ -15,17 +19,32 @@ module.exports = {
 		{
 			title: 'castle',
 			change_to: 'Castle 2009'
-		}
+		},
+		{
+			title: 'archer 2009',
+			change_to: 'Archer'
+		},
 	],
+
+
+	// ---------------------------------------
+	// Development settings
+	// ---------------------------------------
+
+	// Enable move operations
+	move: true,
+
+	// Enable extract operations
+	extract: false,
+
+	// Enable remove operations
+	remove: false,
 
 	// Would you like to see intensions in console.log?
 	log_intent: false,
 
-	// Allow write
-	write: true,
-
-	// Allow delete
-	remove: true
+	// Show all known information about file. Requires log_intent true
+	detailed_information: false
 
 	// Keywords that will be ignored when matching titles
 	// @todo implement feature?

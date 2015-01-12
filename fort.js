@@ -48,8 +48,6 @@ async.waterfall([
 		
 		read_tv(config.tv_directory, function(err, shows) {
 			match_show(shows, episodes, ignored, function(error, episodes) {
-				// console.log(shows)
-				// console.log(episodes)
 				callback(err, episodes, ignored)
 			})
 		})
@@ -65,17 +63,20 @@ async.waterfall([
 
 				// Copy
 				for(var i in copy) {
-					sqwk.stripe(['Copy: ', copy[i].copy], 'green')
+					sqwk.send([['{green}', 'Copy:', copy[i].episode_title]])
+					//if(config.detailed_information) console.log(copy[i])
 				}
 
 				// Extract
 				for(var i in extract) {
-					sqwk.stripe(['Extract: ', extract[i].extract], 'cyan')
+					sqwk.send([['{cyan}', 'Extract:', extract[i].episode_title]])
+					//if(config.detailed_information) console.log(extract[i])
 				}
 
 				// Ignore
 				for(var i in ignored) {
-					sqwk.stripe(['Ignore: ', ignored[i].file_name + ' (' + ignored[i].ignored + ')'], 'yellow')
+					sqwk.send([['{yellow}', 'Ignore:', ignored[i].file_name + ' (' + ignored[i].ignored + ')']])
+					if(config.detailed_information) console.log(ignored[i])
 				}
 
 				sqwk.send(sqwk.hr())
@@ -101,7 +102,6 @@ async.waterfall([
 		extract_downloads(extract, function(err) {
 			callback(err, ignored)
 		})
-
 	}
 
 ],
