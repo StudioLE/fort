@@ -17,12 +17,12 @@ module.exports = {
 	// Use lower case for 'title'
 	show_aliases: [
 		{
-			title: 'castle',
-			change_to: 'Castle 2009'
+			title: '10 green bottles (web series)',
+			change_to: '10 Green Bottles'
 		},
 		{
-			title: 'archer 2009',
-			change_to: 'Archer'
+			title: 'the show 2009',
+			change_to: 'the show'
 		},
 	],
 
