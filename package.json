@@ -2,6 +2,7 @@
   "name": "Fort",
   "version": "0.1.0",
   "description": "Fetch and sort your media files",
+  "keywords": ["fetch", "sort", "media", "files", "library"],
   "main": "fort.js",
   "dependencies": {
     "async": "^0.9.0",
@@ -16,6 +17,19 @@
     "start": "node fort sort",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Laurence Elsdon",
-  "license": "ISC"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/StudioLE/fort.git"
+  },
+  "bugs": {
+    "url": "https://github.com/StudioLE/fort/issues"
+  },
+  "homepage": "https://github.com/StudioLE/fort",
+  "author": {
+    "name": "Laurence Elsdon",
+    "email": "hi@studiole.uk",
+    "url": "https://studiole.uk"
+  },
+  "preferGlobal": true,
+  "license": "MIT"
 }
